@@ -1,6 +1,7 @@
 import customtkinter as ctk
 
 from buttons.Button import Button
+from request_data_generators.ShelterRequestGen import ShelterRequestGen
 
 
 class HomeTabSelection(ctk.CTkFrame):
@@ -20,10 +21,10 @@ class HomeTabSelection(ctk.CTkFrame):
         self.pack(side="left", fill="both")
 
     def home(self):
-        self.main.show_frame(self.main.frame2)
+        self.main.show_frame(self.main.home_frame)
 
     def login_tab(self):
         self.main.show_frame(self.main.login_frame)
 
     def auto_shelter_tab(self):
-        self.main.show_frame(self.main.frame2)
+        ShelterRequestGen.preload_data_into_mem()

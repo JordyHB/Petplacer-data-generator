@@ -3,6 +3,7 @@ import customtkinter as ctk
 from frames.HomeTabSelection import HomeTabSelection
 from frames.LoginFrame import LoginFrame
 from frames.UserBar import UserBar
+from frames.HomeFrame import HomeFrame
 from state.AppState import AppState
 
 # Set the appearance mode and default color theme
@@ -20,19 +21,19 @@ class App(ctk.CTk):
 
         # inserts the user bar
         self.user_bar = UserBar(self, self.app_state)
-
         # inserts home tab selection frame
         self.tab_selection = HomeTabSelection(main=self)
-
         # registers login frame
         self.login_frame = LoginFrame(self, self.app_state)
+        # registers home frame
+        self.home_frame = HomeFrame(main=self)
 
         # dummy frame for testing
         self.frame2 = ctk.CTkFrame(self)
         label2 = ctk.CTkLabel(self.frame2, text="this is tab 2")
         label2.pack()
 
-        self.currently_shown_frame = self.frame2
+        self.currently_shown_frame = self.home_frame
 
         # starts the loop showing the initial frame
         self.show_frame(self.currently_shown_frame)
