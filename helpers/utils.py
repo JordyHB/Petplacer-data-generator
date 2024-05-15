@@ -17,6 +17,8 @@ def gen_dummy_phone_number():
 
 def gen_dummy_email(name):
     possible_suffixes = ["gmail.com", "outlook.com", "hotmail.nl", "yahoo.com"]
+    # Remove any spaces from the name
+    name = name.replace(" ", ".")
     # Concat an email looking string using the name and 1 of the possible suffixes
     return f"{name}@{random.choice(possible_suffixes)}"
 
@@ -26,4 +28,4 @@ def gen_dummy_postalcode():
     number_part = str(random.randint(1000, 9999))
     # Creates 2 random Letters and joins them into a string
     letter_part = "".join(random.choice(string.ascii_uppercase) for _ in range(2))
-    return f"{number_part} {letter_part}"
+    return f"{number_part}{letter_part}"

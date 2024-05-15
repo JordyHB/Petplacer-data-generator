@@ -22,7 +22,7 @@ class App(ctk.CTk):
         # inserts the user bar
         self.user_bar = UserBar(self, self.app_state)
         # inserts home tab selection frame
-        self.tab_selection = HomeTabSelection(main=self)
+        self.tab_selection = HomeTabSelection(main=self, app_state=self.app_state)
         # registers login frame
         self.login_frame = LoginFrame(self, self.app_state)
         # registers home frame

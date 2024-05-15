@@ -8,11 +8,12 @@ from helpers.utils import *
 class HomeTabSelection(ctk.CTkFrame):
     """A class to represent a home tab selection frame in tkinter"""
 
-    def __init__(self, main):
+    def __init__(self, main, app_state):
         """Initialize the home tab selection frame with the given window"""
         super().__init__(main)
 
         self.main = main
+        self.app_state = app_state
 
         self.home_button = Button(self, "Home", command=self.home)
 
@@ -29,6 +30,6 @@ class HomeTabSelection(ctk.CTkFrame):
         self.main.show_frame(self.main.login_frame)
 
     def auto_shelter_tab(self):
-        my_shelter_request_gen = ShelterRequestGen()
+        my_shelter_request_gen = ShelterRequestGen(self.app_state)
         my_shelter_request_gen.preload_data_into_mem()
-        my_shelter_request_gen.build_request()
+        my_shelter_request_gen.post_requests(2000)

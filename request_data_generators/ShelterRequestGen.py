@@ -1,4 +1,6 @@
 import random
+import requests
+import concurrent.futures
 
 from helpers.utils import *
 from pathlib import Path
@@ -10,7 +12,9 @@ class ShelterRequestGen:
     SHELTER_DATA_DIR = ROOT_DIR / "dummy_data_textfiles" / "shelter"
     SHELTER_NAME_DIR = SHELTER_DATA_DIR / "sheltername"
 
-    def __init__(self):
+    def __init__(self, app_state):
+        # reference to the app state
+        self.app_state = app_state
         # place to store the data in memory
         self.shelter_name_data = None
         self.street_name_data = None
@@ -57,9 +61,10 @@ class ShelterRequestGen:
             return shelter_name
         # If not goes for another try at generating a unique name
         else:
-            self.get_random_shelter_name()
+            return self.get_random_shelter_name()
 
     def get_random_address(self):
+        # Adds a number to a street
         random_street = random.choice(self.street_name_data)
         address = f"{random_street} {random.randint(1, 150)}"
         return address
@@ -77,4 +82,27 @@ class ShelterRequestGen:
         request_dict["website"] = "https://www.example.com"
         request_dict["facilities"] = "Facility 1, Facility 2, Facility 3"
         request_dict["openingHours"] = "Monday to Friday: 9am to 5pm"
-        print(request_dict)
+
+        return request_dict
+
+    def post_requests(self, amount_of_requests):
+        with requests.Session() as session:
+            with concurrent.futures.ThreadPoolExecutor() as executor:
+                # Submit all requests to the executor
+                futures = [executor.submit(
+                    session.post,
+                    url=f"{self.app_state.base_url}/users/admin/shelters",
+                    json=self.build_request(),
+                    headers={
+                        'Content-Type': 'application/json',
+                        "Authorization": f"Bearer {self.app_state.token}"
+                    }
+                ) for _ in range(amount_of_requests)]
+
+                # Wait for results and print them
+                for future in concurrent.futures.as_completed(futures):
+                    response = future.result()
+                    print(response.status_code)
+                    print(response.content)
+
+
